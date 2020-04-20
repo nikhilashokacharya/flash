@@ -1,6 +1,14 @@
 package com.tyss.springmvc1.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,14 +56,62 @@ public class EmployeeController {
 	public String addEmployeeForm() {
 		return "user-form";
 	}
-	@GetMapping("/addEmployee")
-	public String addEmployee(EmployeeInfoBean employeeInfoBean,ModelMap modelMap) {
-		service.saveEmployee(employeeInfoBean);
-		modelMap.addAttribute("listUser",employeeInfoBean);
-		return "user-list";
-		
-	}
+	@PostMapping("/addEmployee")
+	private void insertUser(HttpServletRequest request, HttpServletResponse response)
+		    throws SQLException, IOException {
+		        String name = request.getParameter("name");
+		        String email = request.getParameter("email");
+		        LocalDate dateofbirth = LocalDate.parse(request.getParameter("dateofbirth"));
+		        LocalDate dateofjoining = LocalDate.parse(request.getParameter("dateofjoining"));
+		        int deptID = Integer.parseInt(request.getParameter("deptID"));
+		        String designation = request.getParameter("designation");
+		        int salary = Integer.parseInt(request.getParameter("salary"));
+		        int managerID = Integer.parseInt(request.getParameter("managerID"));
+		        long mobileNo = Long.parseLong(request.getParameter("mobileNo"));
+		        String password = request.getParameter("password");
+		        EmployeeInfoBean newUser = new EmployeeInfoBean(name, email, dateofbirth, dateofjoining, deptID, designation, salary, managerID, mobileNo ,password);
+		        service.saveEmployee(newUser);
+		        response.sendRedirect("/springmvc1/listEmployee");
+		    }
+	@GetMapping("/updateEmployeeForm")
+	private void updateEmployeeForm(HttpServletRequest request, HttpServletResponse response)
+		    throws SQLException, ServletException, IOException {
+		        int id = Integer.parseInt(request.getParameter("id"));
+		        EmployeeInfoBean existingUser = service.getEmployee(id);
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("/addEmployee");
+		        request.setAttribute("user", existingUser);
+		        dispatcher.forward(request, response);
+
+		    }
 	
+	@PostMapping("/updateEmployee")
+	private void updateEmployee(HttpServletRequest request, HttpServletResponse response)
+		    throws SQLException, IOException {
+		        int id = Integer.parseInt(request.getParameter("id"));
+		        String name = request.getParameter("name");
+		        String email = request.getParameter("email");
+		        LocalDate dateofbirth = LocalDate.parse(request.getParameter("dateofbirth"));
+		        LocalDate dateofjoining = LocalDate.parse(request.getParameter("dateofjoining"));
+		        int deptID = Integer.parseInt(request.getParameter("deptID"));
+		        String designation = request.getParameter("designation");
+		        int salary = Integer.parseInt(request.getParameter("salary"));
+		        int managerID = Integer.parseInt(request.getParameter("managerID"));
+		        long mobileNo = Long.parseLong(request.getParameter("mobileNo"));
+		        String password = request.getParameter("password");
+
+		        EmployeeInfoBean user = new EmployeeInfoBean(name, email, dateofbirth, dateofjoining, deptID, designation, salary, managerID, mobileNo ,password);
+		        service.updateUser(user);
+		        response.sendRedirect("/springmvc1/listEmployee");
+		    }
 	
+	@GetMapping("/deleteUser")
+	 private void deleteUser(HttpServletRequest request, HttpServletResponse response)
+			    throws SQLException, IOException {
+			        int id = Integer.parseInt(request.getParameter("id"));
+			        service.deleteUser(id);
+			        response.sendRedirect("/springmvc1/listEmployee");
+			    }
+	
+
 	
 }// End of controller

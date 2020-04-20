@@ -3,8 +3,6 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<% EmployeeInfoBean employeeInfoBean = (EmployeeInfoBean) request.getAttribute("employee12");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,21 +10,31 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
+	<%
+		String username2 = (String) session.getAttribute("username1");
+		if (username2 == null) {
+
+			response.sendRedirect("index.jsp");
+		}
+		String status = request.getParameter("status");
+		if (status != null) {
+			if (status.equals("false")) {
+				out.print("Invalid Credentials");
+			}
+		}
+	%>
 	<center>
 		<h1>User Management</h1>
 		<h2>
-			<a href="http://localhost:8080/springmvc1/getEmployeeForm">Search
-				Employee</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/getEmployeeForm">Add New Employee</a>
-			&nbsp;&nbsp;&nbsp; <a href="list">List All Users</a>
-			&nbsp;&nbsp;&nbsp; <a
-				href="http://localhost:8080/egproject21/logout.jsp">Logout</a>
+		<a href="http://localhost:8080/springmvc1/getEmployeeForm">Search Employee</a> &nbsp;&nbsp;&nbsp; 
+			<a href="http://localhost:8080/springmvc1/addEmployeeForm">Add New Employee</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/listEmployee">List
+				All Users</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/logout.jsp">Logout</a>
 
 		</h2>
 	</center>
 	<div align="center">
 		<c:if test="${employeeInfoBean != null}">
-			<form action="update" method="POST">
+			<form action="./updateEmployee" method="POST">
 		</c:if>
 		<c:if test="${employeeInfoBean == null}">
 			<form action="./addEmployee" method="POST">

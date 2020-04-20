@@ -8,13 +8,27 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%
 
+	String username2 = (String)session.getAttribute("username1");
+	if(username2==null){
+		
+		response.sendRedirect("/WEB_INF/views/index.jsp");
+	} 
+	String status = request.getParameter("status");
+	if(status!=null){
+		if(status.equals("false")){
+			out.print("Invalid Credentials");
+		}
+	}
+
+%>
 	<center>
 		<h1>User Management</h1>
 		<h2>
 		<a href="http://localhost:8080/springmvc1/getEmployeeForm">Search Employee</a> &nbsp;&nbsp;&nbsp; 
-			<a href="new">Add New Employee</a> &nbsp;&nbsp;&nbsp; <a href="list">List
-				All Users</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/egproject21/logout.jsp">Logout</a>
+			<a href="http://localhost:8080/springmvc1/addEmployeeForm">Add New Employee</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/listEmployee">List
+				All Users</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/logout.jsp">Logout</a>
 
 		</h2>
 	</center>
@@ -49,9 +63,9 @@
 					<td><c:out value="${employeeInfoBean.managerID}" /></td>
 					<td><c:out value="${employeeInfoBean.mobileNo}" /></td>
 					<td><c:out value="${employeeInfoBean.password}" /></td>
-					<td><a href="edit?id=<c:out value='${employeeInfoBean.id}' />">Edit</a>
+					<td><a href="./updateEmployeeForm?id=<c:out value='${employeeInfoBean.id}' />">Edit</a>
 						&nbsp;&nbsp;&nbsp;&nbsp; <a
-						href="delete?id=<c:out value='${employeeInfoBean.id}' />">Delete</a></td>
+						href="./deleteUser?id=<c:out value='${employeeInfoBean.id}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

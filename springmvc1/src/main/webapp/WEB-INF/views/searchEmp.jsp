@@ -12,11 +12,32 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<body>
+<body><%
+		String username2 = (String) session.getAttribute("username1");
+		if (username2 == null) {
+
+			response.sendRedirect("index.jsp");
+		}
+		String status = request.getParameter("status");
+		if (status != null) {
+			if (status.equals("false")) {
+				out.print("Invalid Credentials");
+			}
+		}
+	%>
+<center>
+		<h1>User Management</h1>
+		<h2>
+		<a href="http://localhost:8080/springmvc1/getEmployeeForm">Search Employee</a> &nbsp;&nbsp;&nbsp; 
+			<a href="http://localhost:8080/springmvc1/addEmployeeForm">Add New Employee</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/listEmployee">List
+				All Users</a> &nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/springmvc1/logout.jsp">Logout</a>
+
+		</h2>
+	</center>
 	<fieldset>
 		<legend>Search Employee Record</legend>
 		<form action="./getEmployee" method="get">
-			Employee ID : <input type="text" name="d" required="required">
+			Employee ID : <input type="text" name="id" required="required">
 			<br><br>
 			<input type="submit" value="Search"> 
 		</form>
